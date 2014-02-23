@@ -12,7 +12,7 @@ Discourse Team recommends a minimum of 1 GB Ram, so that's what we are gonna go 
 
 We will install Discourse on Ubuntu 12.04.3 x64 as this is [recommended][2] in [Official Documentation][3].
 
-<img src="/uploads/default/2998/0084fb4e84c1d812.png" width="690" height="404"> 
+<img src="https://meta-discourse.r.worldssl.net/uploads/default/2998/0084fb4e84c1d812.png" width="690" height="404"> 
 
 Once you will complete with above steps you will receive a mail from Digital Ocean, providing root users password. (In case you have entered your SSH keys, then you don't require password to login).
 
@@ -24,11 +24,11 @@ To access the droplet, type in following command in your terminal:
 
 Replace `162.243.201.40` with the IP address you got from Digital Ocean.
 
-<img src="/uploads/default/2999/0934a0158459ec3f.png" width="571" height="130"> 
+<img src="https://meta-discourse.r.worldssl.net/uploads/default/2999/0934a0158459ec3f.png" width="571" height="130"> 
 
 It will ask your permission to connect, type `yes`, and then it will ask you for root's password. The root's password is in your mail which Digital Ocean sent you. Type in the password and you will be welcomed by newly installed Ubuntu Server.
 
-<img src="/uploads/default/3000/8209c1e40c9d70a8.png" width="570" height="278"> 
+<img src="https://meta-discourse.r.worldssl.net/uploads/default/3000/8209c1e40c9d70a8.png" width="570" height="278"> 
 
 # Install Git
 
@@ -38,7 +38,7 @@ To install Git, you just need to type in the command:
 
 and you are good to go.
 
-<img src="/uploads/default/3002/eafbf14df8eee832.png" width="572" height="263"> 
+<img src="https://meta-discourse.r.worldssl.net/uploads/default/3002/eafbf14df8eee832.png" width="572" height="263"> 
 
 #Generate SSH Key
 
@@ -58,13 +58,13 @@ Run following commands:
     sudo apt-get update
     sudo apt-get install linux-image-generic-lts-raring linux-headers-generic-lts-raring
 
-<img src="/uploads/default/3001/e94722e882f28994.png" width="566" height="339"> 
+<img src="https://meta-discourse.r.worldssl.net/uploads/default/3001/e94722e882f28994.png" width="566" height="339"> 
 
 Now we will perform a system reboot:
 
     sudo reboot
 
-<img src="/uploads/default/3003/d3cc759ced335d25.png" width="532" height="155"> 
+<img src="https://meta-discourse.r.worldssl.net/uploads/default/3003/d3cc759ced335d25.png" width="532" height="155"> 
 
 Above command will log you out from ssh session, ssh in again:
 
@@ -80,7 +80,7 @@ Type in following commands:
     sudo apt-get update
     sudo apt-get install lxc-docker
 
-<img src="/uploads/default/3004/e75967a1a8e27ea3.png" width="567" height="307"> 
+<img src="https://meta-discourse.r.worldssl.net/uploads/default/3004/e75967a1a8e27ea3.png" width="567" height="307"> 
 
 # Install Discourse
 
@@ -104,7 +104,7 @@ Now we will copy the `samples/standalone.yml` file and place it inside `containe
 
     cp samples/standalone.yml containers/app.yml
 
-<img src="/uploads/default/3005/5c253f4657e2133f.png" width="571" height="56"> 
+<img src="https://meta-discourse.r.worldssl.net/uploads/default/3005/5c253f4657e2133f.png" width="571" height="56"> 
 
 Now we need modify the newly copied `app.yml` with our default variables:
 
@@ -114,11 +114,11 @@ Now we need modify the newly copied `app.yml` with our default variables:
 
 You will see something like:
 
-<img src="/uploads/default/3006/ed9f51b3a44f2b86.png" width="572" height="451"> 
+<img src="https://meta-discourse.r.worldssl.net/uploads/default/3006/ed9f51b3a44f2b86.png" width="572" height="451"> 
 
 You may modify the file as per your requirement, but for the sake of simplicity I will only modify two variables `DISCOURSE_DEVELOPER_EMAILS` and `DISCOURSE_HOSTNAME`.
 
-<img src="/uploads/default/2979/e6fedbde9b471880.png" width="565" height="172"> 
+<img src="https://meta-discourse.r.worldssl.net/uploads/default/2979/e6fedbde9b471880.png" width="565" height="172"> 
 
 Notice that I renamed the `DISCOURSE_HOSTNAME` to `discourse.techapj.com`, this means that I want to host my instance of Discourse on http://discourse.techapj.com/, for this to work properly you will need to modify DNS Records (I will post a separate guide to configure DNS Records).
 
@@ -146,7 +146,7 @@ Save the `app.yml` file, and run following command:
 
     sudo ./launcher bootstrap app
 
-<img src="/uploads/default/3007/c0596ad3d330ae71.png" width="567" height="138"> 
+<img src="https://meta-discourse.r.worldssl.net/uploads/default/3007/c0596ad3d330ae71.png" width="567" height="138"> 
 
 This command may take some time, but it's doing all the hard work for you. Go drink some coffee, while this command is *automagically* configuring the Discourse environment for you.
 
@@ -154,11 +154,11 @@ When this command executes, type in the following command to start instance of y
 
     sudo ./launcher start app
 
-<img src="/uploads/default/3008/ced00cf4782f020c.png" width="568" height="137"> 
+<img src="https://meta-discourse.r.worldssl.net/uploads/default/3008/ced00cf4782f020c.png" width="568" height="137"> 
 
 Congratulations! You have your own live instance of Discourse running on the host you provided in `app.yml` file at the time of setup.
 
-<img src="/uploads/default/3009/5c7b0accf602dcca.png" width="689" height="246"> 
+<img src="https://meta-discourse.r.worldssl.net/uploads/default/3009/5c7b0accf602dcca.png" width="689" height="246"> 
 
 *You can also access your instance of Discourse by visiting your `IP_ADDRESS`.*
 
