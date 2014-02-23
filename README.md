@@ -8,7 +8,7 @@ The below guide assumes that you have no knowledge of Ruby/Rails, Shell, so it w
 
 Discourse Team recommends a minimum of 1 GB Ram, so that's what we are gonna go with. For the sake of simplicity we will name the Hostname as discourse.
 
-<img src="/uploads/default/2997/c453053824cef71a.png" width="690" height="457"> 
+<img src="https://meta-discourse.r.worldssl.net/uploads/default/2997/c453053824cef71a.png" width="690" height="457"> 
 
 We will install Discourse on Ubuntu 12.04.3 x64 as this is [recommended][2] in [Official Documentation][3].
 
