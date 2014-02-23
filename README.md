@@ -178,11 +178,7 @@ In case your account is not flagged as admin (which is rare, but is apparently b
 
 Voilà, you are now the admin of your own Discourse installation!
 
-Okay, that's it for this guide. In my next post I'll talk in detail about more advanced topics like *Configuring mail*, *Tweaking admin*, *SSH access to running containers*, etc.
-
 Please provide your feedback, if anything needs to be improved, don't hesitate. Also the fine folks here at [Discourse][8] are always ready to help you, in case you face any problem.
-
-**Note**: *Please go through below posts first, before asking problems, chances are someone else might have ran into exact same problem, and answer was available right here, all along. If you still can't find the answer, please do ask,  someone else might be facing the exact same problem.* :sweat_smile:
 
 **I'll try to update this guide as frequently as possible.**
 
