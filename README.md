@@ -1,67 +1,54 @@
-The [Discourse Docker Image][dd] makes it easy to set up Discourse on a cloud server. We will use [Digital Ocean][do], although these steps may work on other cloud providers.
-
-This guide assumes that you have no knowledge of Ruby/Rails or Linux shell. 
+**Set up Discourse on a cloud server in under 30 minutes** with zero knowledge of Ruby, Rails or Linux shell using our [Discourse Docker image][dd]. We prefer [Digital Ocean][do], although these steps may work on other cloud providers that also support Docker. Let's begin!
 
 # Create New Digital Ocean Droplet
 
 [Sign up for Digital Ocean][do], update billing info, then begin creating your new cloud server (Droplet).
 
-Discourse requires a minimum of 1 GB RAM, however **2 GB RAM is strongly recommended**. We'll use "discourse" as the Hostname.
+Use the URL of your new site as the Droplet hostname, e.g. `discourse.example.com`. Discourse requires a minimum of **1 GB RAM** for small communities; we recommend 2 GB RAM for medium communities. 
 
-<img src="https://meta-discourse.r.worldssl.net/uploads/default/3506/a6b550bd2b05b76b.png" width="638" height="500"> 
+<img src="https://meta-discourse.r.worldssl.net/uploads/default/4425/0c25b42ee3d35636.png" width="670" height="489"> 
 
-Install Discourse on Ubuntu 12.04.3 LTS x64. We always recommend using [the current LTS distribution][lts].
+Install Discourse on Ubuntu 14.04 LTS x64. Always select [the latest LTS distribution][lts].
 
-<img src="https://meta-discourse.r.worldssl.net/uploads/default/3399/f3fc67ee6aa90ea4.png" width="690" height="477"> 
+<img src="https://meta.discourse.org/uploads/default/4426/9f3bf74726a3384f.png" width="540" height="478"> 
 
-You will receive a mail from Digital Ocean with the root password to your Droplet. (However, if you know how to use SSH keys, you may not need a password to log in.)
+You will receive a mail from Digital Ocean with the root password to your Droplet. (However, if you know [how to use SSH keys](https://www.google.com/search?q=digitalocean+ssh+keys), you may not need a password to log in.)
 
 # Access Your Droplet
 
-Connect to your Droplet via SSH:
+Connect to your Droplet via SSH, or use [Putty][put] on Windows:
 
     ssh root@192.168.1.1
-
-(Alternately, use [Putty][put] on Windows)
 
 Replace `192.168.1.1` with the IP address of your Droplet.
 
-<img src="https://meta-discourse.r.worldssl.net/uploads/default/2999/0934a0158459ec3f.png" width="571" height="130"> 
+<img src="https://meta-discourse.r.worldssl.net/uploads/default/4442/ab4202454828b167.png" width="586" height="128"> 
 
-You will be asked for permission to connect, type `yes`, then the root password, which is in the email Digital Ocean sent you when the Droplet was set up. Enter it.
+You will be asked for permission to connect, type `yes`, then enter the root password from the email Digital Ocean sent you when the Droplet was set up.
 
-<img src="https://meta-discourse.r.worldssl.net/uploads/default/3000/8209c1e40c9d70a8.png" width="570" height="278"> 
+<img src="https://meta-discourse.r.worldssl.net/uploads/default/4443/48cc7135c89768bd.png" width="584" height="300"> 
 
-# Update the kernel
+# Set up Swap (if needed)
 
-    apt-get update
-    apt-get install linux-image-generic-lts-raring linux-headers-generic-lts-raring
+- If you're using the minimum 1 GB install, you *must* [set up a swap file](https://meta.discourse.org/t/create-a-swapfile-for-your-linux-server/13880).
 
-<img src="https://meta-discourse.r.worldssl.net/uploads/default/3001/e94722e882f28994.png" width="566" height="339"> 
-
-Reboot the server:
-
-    reboot
-
-<img src="https://meta-discourse.r.worldssl.net/uploads/default/3003/d3cc759ced335d25.png" width="532" height="155"> 
-
-This will log you out from your SSH session, so reconnect:
-
-    ssh root@192.168.1.1
+- If you're using 2 GB+ memory, you can probably get by without a swap file.
 
 # Install Git
 
     apt-get install git
 
-<img src="https://meta-discourse.r.worldssl.net/uploads/default/3002/eafbf14df8eee832.png" width="572" height="263"> 
+<img src="https://meta-discourse.r.worldssl.net/uploads/default/4444/fdddb36daf2e9b69.png" width="586" height="293"> 
 
 # Install Docker
 
     wget -qO- https://get.docker.io/ | sh
 
+<img src="https://meta-discourse.r.worldssl.net/uploads/default/4445/35af9b94d045c691.png" width="586" height="452"> 
+
 # Install Discourse
 
-Create a `/var/docker` folder where all the Docker related stuff will reside:
+Create a `/var/docker` folder:
 
     mkdir /var/docker
 
@@ -73,39 +60,41 @@ Switch to your Docker folder:
 
     cd /var/docker
 
-Copy the `samples/standalone.yml` file into the `containers` folder as `app.yml`, so the path becomes `containers/app.yml`:
+Copy the `samples/standalone.yml` file into the `containers` folder as `app.yml`:
 
     cp samples/standalone.yml containers/app.yml
 
-<img src="https://meta-discourse.r.worldssl.net/uploads/default/3005/5c253f4657e2133f.png" width="571" height="56"> 
+<img src="https://meta-discourse.r.worldssl.net/uploads/default/4446/5f28af7f5b345823.png" width="586" height="246"> 
 
-Edit `app.yml`:
+# Edit Discourse Configuration
+
+Edit the Discourse configuration at `app.yml`:
 
     nano containers/app.yml
 
-(We recommend Nano because it works like a typical GUI text editor, just use your arrow keys. Hit <kbd>Ctrl</kbd><kbd>O</kbd> then <kbd>Enter</kbd> to save and <kbd>Ctrl</kbd><kbd>X</kbd> to exit. However, feel free to choose whatever text editor you like. In the below screenshot we use Vim.)
+We recommend Nano because it works like a typical GUI text editor, just use your arrow keys.
 
-<img src="https://meta-discourse.r.worldssl.net/uploads/default/3006/ed9f51b3a44f2b86.png" width="572" height="451"> 
+- Set `DISCOURSE_DEVELOPER_EMAILS` to your email address.
+ 
+- Set `DISCOURSE_HOSTNAME` to `discourse.example.com`, this means you want your Discourse available at `http://discourse.example.com/`. You'll need to update the DNS A record for this domain with the IP address of your server.
+ 
+- Place your mail credentials in `DISCOURSE_SMTP_ADDRESS`, `DISCOURSE_SMTP_PORT`, `DISCOURSE_SMTP_USER_NAME`, `DISCOURSE_SMTP_PASSWORD`. Be sure you remove the comment `#` character and space from the front of these lines as necessary.
 
-Edit as desired, but at minimum set `DISCOURSE_DEVELOPER_EMAILS` and `DISCOURSE_HOSTNAME`.
+- If you are using a 1 GB instance, set `UNICORN_WORKERS` to 2 so you have more memory room.
 
-<img src="https://meta-discourse.r.worldssl.net/uploads/default/2979/e6fedbde9b471880.png" width="565" height="172"> 
+<img src="https://meta.discourse.org/uploads/default/4435/67807de39c6bbc61.png" width="578" height="407"> 
 
-If you set `DISCOURSE_HOSTNAME` to `discourse.example.com`, this means you want to host our instance of Discourse on `http://discourse.example.com/`. You'll need to change your DNS records to reflect the IP address and preferred URL address of your server.
+After completing your edits, press <kbd>Ctrl</kbd><kbd>O</kbd> then <kbd>Enter</kbd> to save and <kbd>Ctrl</kbd><kbd>X</kbd> to exit.
 
-# Mail Setup
+# Email
 
-**Email is critical to Discourse. We strongly recommend configuring mail settings before bootstrapping.**
+**Email is critical for account creation and notifications in Discourse. If you do not configure email before bootstrapping you will have a broken site!**
 
-- If you already have a mail server, put your existing mail server credentials in the `app.yml` file.
+- Already have a mail server? Great. Use your existing mail server credentials.
 
-- Otherwise, create a free account on [**Mandrill**][man] (or [Mailgun][gun], or [Mailjet][jet]), and put your mail credentials (available via the Mandrill dashboard) in the `app.yml` file. The settings you want to change are `DISCOURSE_SMTP_ADDRESS`, `DISCOURSE_SMTP_PORT`, `DISCOURSE_SMTP_USER_NAME`, `DISCOURSE_SMTP_PASSWORD`.
+- No existing mail server, or you don't know what it is? No problem, create a free account on [**Mandrill**][man] (or [Mailgun][gun], or [Mailjet][jet]), and use the credentials provided in the dashboard.
 
-- Be sure you remove the comment character and space `# ` from the beginning of these mail configuration lines!
-
-- Don't forget to set the [SPF and DKIM records](http://help.mandrill.com/entries/21751322-What-are-SPF-and-DKIM-and-do-I-need-to-set-them-up-) up for your domain name. In Mandrill, that's under Sending Domains, View DKIM/SPF setup instructions.
-
-- The name of your droplet is your reverse PTR record; rename your droplet to `discourse.example.com` so the PTR record correctly reflects your domain name.
+- For proper email deliverability, you must set the [SPF and DKIM records](http://help.mandrill.com/entries/21751322-What-are-SPF-and-DKIM-and-do-I-need-to-set-them-up-) in your DNS. In Mandrill, that's under Sending Domains, View DKIM/SPF setup instructions.
 
 # Bootstrap Discourse
 
@@ -113,32 +102,31 @@ Be sure to save the `app.yml` file, and begin bootstrapping Discourse:
 
     ./launcher bootstrap app
 
-<img src="https://meta-discourse.r.worldssl.net/uploads/default/3007/c0596ad3d330ae71.png" width="567" height="138"> 
+This command can take up to 8 minutes. It is automagically configuring your Discourse environment.
 
-This command may take 10+ minutes, so be prepared to wait. It is automagically configuring your Discourse environment.
+<img src="https://meta-discourse.r.worldssl.net/uploads/default/4448/55b88822f00fa505.png" width="593" height="229"> 
 
 After that completes, start Discourse:
 
     ./launcher start app
 
-<img src="https://meta-discourse.r.worldssl.net/uploads/default/3008/ced00cf4782f020c.png" width="568" height="137"> 
+Congratulations! You now have your own instance of Discourse!
 
-Congratulations! You now have your own instance of Discourse, accessible via the domain name you entered in `app.yml` earlier.
+It should be accessible via the domain name `discourse.example.com` you entered earlier, provided you configured DNS. If not, you can also visit the server IP directly, e.g. `http://192.168.1.1`.
 
-<img src="https://meta-discourse.r.worldssl.net/uploads/default/3507/d01eee7415f860f2.png" width="690" height="291">
+<img src="https://meta-discourse.r.worldssl.net/uploads/default/4512/56d0c013a24981cd.png" width="690" height="342"> 
 
-You can also access it by visiting the server IP address directly, e.g. `http://192.168.1.1`.
+# Register New Account and Become Admin
 
-# Log In and Become Admin
+There is a reminder at the top about `DISCOURSE_DEVELOPER_EMAILS`; be sure you register a new account via one of those email addresses, and your account will automatically be made an Admin.
 
-Sign into your Discourse instance. There should be a reminder visible on the site about which email was used for the  `DISCOURSE_DEVELOPER_EMAILS` address. Be sure you log in with that email, and your account will be made Admin by default.
+<img src="https://meta-discourse.r.worldssl.net/uploads/default/4513/459a7df42fb9ee83.png" width="690" height="350"> 
+
+You should see Staff topics and the Admin Quick Start Guide. Please read it!
 
 # Post-Install Maintenance
 
-We believe most small and medium size Discourse installs will be fine with the recommended 2 GB of RAM. However, if you are using the absolute minimum 1 GB of RAM, or your forum is growing you may want to [set up a swap file](https://meta.discourse.org/t/create-a-swapfile-for-your-linux-server/13880) just in case.
-
 To **upgrade Discourse to the latest version**, visit `/admin/docker`, refresh the page a few times (yes, seriously) and then press the Upgrade button at the top. View the live output at the bottom of your browser to see when things are complete. You should see:
-
 
     Killed sidekiq
     Restarting unicorn pid: 37
@@ -146,7 +134,22 @@ To **upgrade Discourse to the latest version**, visit `/admin/docker`, refresh t
 
 Then you know it's complete. (Yes, we will be improving this process soon!)
 
-# Other Optional Stuff
+The `launcher` command in the `/var/docker` folder can be used for various kinds of maintenance:
+
+```
+Usage: launcher COMMAND CONFIG
+Commands:
+    start:      Start/initialize a container
+    stop:       Stop a running container
+    restart:    Restart a container
+    destroy:    Stop and remove a container
+    ssh:        Start a bash shell in a running container
+    logs:       Docker logs for container
+    bootstrap:  Bootstrap a container for the config based on a template
+    rebuild:    Rebuild a container (destroy old, bootstrap, start new)
+```
+
+# Other Awesome Stuff
 
 Do you want...
 
@@ -156,14 +159,20 @@ Do you want...
 
 - Users to post reples via email? [Configure reply via email](https://meta.discourse.org/t/set-up-reply-via-email-support/14003).
 
-- Automatic daily backups? [Configure backups](https://meta.discourse.org/t/hot-off-the-presses-automated-backup-support/13805)
+- Automatic daily backups? [Configure backups](https://meta.discourse.org/t/configure-automatic-backups-for-discourse/14855).
+ 
+- HTTPS / SSL support? [Configure SSL](https://meta.discourse.org/t/allowing-ssl-for-your-discourse-docker-setup/13847).
+ 
+- Multiple Discourse sites on the same server? [Configure multisite](https://meta.discourse.org/t/multisite-configuration-with-docker/14084).
+ 
+- A Content Delivery Network to speed up worldwide access? [Configure a CDN](https://meta.discourse.org/t/enable-a-cdn-for-your-discourse/14857).
 
 If anything needs to be improved in this guide, feel free to ask on [meta.discourse.org][meta], or even better, submit a pull request.
 
    [dd]: https://github.com/discourse/discourse_docker
   [man]: https://mandrillapp.com
   [ssh]: https://help.github.com/articles/generating-ssh-keys
- [meta]: https://meta.discourse.org
+ [meta]: https://meta.discourse.org/t/beginners-guide-to-deploy-discourse-on-digital-ocean-using-docker/12156
    [do]: https://www.digitalocean.com/?refcode=5fa48ac82415
   [lts]: https://wiki.ubuntu.com/LTS
   [jet]: http://www.mailjet.com/pricing
